@@ -140,18 +140,20 @@ Reports generated:
 - `kaggle_eval/output/kaggle_validation_report.json`
 - `kaggle_eval/output/kaggle_validation_report.md`
 
-Recent smoke-run similarity scores (1 epoch sanity run, not final-quality training):
+Recent high-epoch benchmark results (GPU run, `--ae-epochs 80 --gan-epochs 160 --batch-size 512`):
 
 | Case | Similarity |
 |---|---:|
-| telco_churn | 0.9234 |
-| stroke_prediction | 0.8187 |
-| adult_income | 0.8929 |
-| heart_failure | 0.8674 |
-| credit_card_fraud | 0.8463 |
-| pima_diabetes | 0.8019 |
-| diabetes_general | 0.8019 |
-| **average** | **0.8504** |
+| telco_churn | 0.9266 |
+| stroke_prediction | 0.8613 |
+| adult_income | 0.9055 |
+| heart_failure | 0.9059 |
+| credit_card_fraud | 0.8910 |
+| pima_diabetes | 0.8835 |
+| diabetes_general | 0.8835 |
+| **average** | **0.8939** |
+
+All benchmark cases are now above `0.8` overall similarity.
 
 ## Testing and CI
 
@@ -177,5 +179,6 @@ See `.github/workflows/ci.yml`.
 ## Additional docs
 
 - [Architecture](docs/ARCHITECTURE.md)
+- [Benchmark Results](docs/BENCHMARK_RESULTS.md)
 - [Known Limitations](docs/KNOWN_LIMITATIONS.md)
 - [Push Checklist](docs/PUSH_CHECKLIST.md)
