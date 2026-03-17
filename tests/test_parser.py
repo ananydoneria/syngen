@@ -58,7 +58,7 @@ def test_fuzzy_column_match() -> None:
 
 
 def test_rows_about_k_notation() -> None:
-    spec = parse_prompt("Need around 1.5k telecom customers with churn is yes")
+    spec = parse_prompt("Need around 1.5k ecommerce customers with churned is yes")
     assert spec.n_rows == 1500
 
 
@@ -75,9 +75,9 @@ def test_at_least_normalization_to_operator() -> None:
 
 
 def test_nl_clause_with_equals_is_not_misread_as_kv() -> None:
-    spec = parse_prompt("Generate 1500 telecom customers with churn=yes and credit score >=620")
+    spec = parse_prompt("Generate 1500 finance customers with defaulted=yes and credit score >=620")
     assert spec.n_rows == 1500
-    assert spec.filters["churned"]["value"] == "yes"
+    assert spec.filters["defaulted"]["value"] == "yes"
     assert spec.filters["credit_score"]["min"] == 620.0
 
 

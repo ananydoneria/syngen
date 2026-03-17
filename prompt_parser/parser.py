@@ -172,15 +172,17 @@ def _resolve_profile(text: str, kv_pairs: dict[str, str], warnings: list[str]) -
         if requested in DOMAIN_KEYWORDS:
             key = DOMAIN_KEYWORDS[requested]
             return key, DOMAIN_REGISTRY[key]
-        warnings.append(
-            f"Unknown industry '{requested}'. Falling back to general profile while keeping target label."
+        raise PromptParseException(
+            ParseErrorReport(
+                message=f"Unsupported domain '{requested}'.",
+                suggested_prompt="Use one of: healthcare, finance, or ecommerce.",
+            )
         )
-        return requested, DOMAIN_REGISTRY["general"]
 
     for keyword, profile_name in DOMAIN_KEYWORDS.items():
         if keyword in text:
             return profile_name, DOMAIN_REGISTRY[profile_name]
-    return "general", DOMAIN_REGISTRY["general"]
+    return "healthcare_v1", DOMAIN_REGISTRY["healthcare_v1"]
 
 
 def _extract_rows(text: str, spec: PromptSpec) -> None:

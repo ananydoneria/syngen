@@ -13,78 +13,6 @@ class DomainProfile:
     phrase_to_value: dict[str, tuple[str, str]]
 
 
-def _shared_profile() -> DomainProfile:
-    return DomainProfile(
-        name="general",
-        numeric_columns={
-            "age",
-            "income",
-            "score",
-            "tenure_months",
-            "transaction_amount",
-            "monthly_spend",
-            "balance",
-            "risk_score",
-            "credit_score",
-            "conversion_rate",
-        },
-        numeric_bounds={
-            "age": (18, 80),
-            "income": (1000, 300000),
-            "score": (0, 100),
-            "tenure_months": (1, 120),
-            "transaction_amount": (1, 20000),
-            "monthly_spend": (10, 10000),
-            "balance": (0, 1000000),
-            "risk_score": (0, 1),
-            "credit_score": (300, 900),
-            "conversion_rate": (0, 1),
-        },
-        categorical_values={
-            "sex": {"male", "female", "other"},
-            "region": {"north", "south", "east", "west"},
-            "industry_segment": {"enterprise", "mid_market", "smb"},
-            "churned": {"yes", "no"},
-        },
-        aliases={
-            "age": "age",
-            "income": "income",
-            "score": "score",
-            "risk": "risk_score",
-            "risk score": "risk_score",
-            "credit score": "credit_score",
-            "credit": "credit_score",
-            "amount": "transaction_amount",
-            "spend": "monthly_spend",
-            "balance": "balance",
-            "tenure": "tenure_months",
-            "months": "tenure_months",
-            "gender": "sex",
-            "sex": "sex",
-            "region": "region",
-            "segment": "industry_segment",
-            "industry": "industry_segment",
-            "lifetime value": "balance",
-            "ltv": "balance",
-            "revenue": "monthly_spend",
-            "sales": "monthly_spend",
-            "utilization": "risk_score",
-            "churn": "churned",
-        },
-        phrase_to_value={
-            "female": ("sex", "female"),
-            "male": ("sex", "male"),
-            "enterprise": ("industry_segment", "enterprise"),
-            "smb": ("industry_segment", "smb"),
-            "mid market": ("industry_segment", "mid_market"),
-            "churned": ("churned", "yes"),
-            "not churned": ("churned", "no"),
-            "churn yes": ("churned", "yes"),
-            "churn no": ("churned", "no"),
-        },
-    )
-
-
 def _healthcare_profile() -> DomainProfile:
     return DomainProfile(
         name="healthcare_v1",
@@ -324,20 +252,9 @@ DOMAIN_KEYWORDS = {
     "ecommerce": "ecommerce_v1",
     "e-commerce": "ecommerce_v1",
     "retail": "ecommerce_v1",
-    "insurance": "general",
-    "telecom": "general",
-    "education": "general",
-    "edtech": "general",
-    "saas": "general",
-    "manufacturing": "general",
-    "transport": "general",
-    "logistics": "general",
-    "energy": "general",
-    "hospitality": "general",
 }
 
 DOMAIN_REGISTRY: dict[str, DomainProfile] = {
-    "general": _shared_profile(),
     "healthcare_v1": _healthcare_profile(),
     "finance_v1": _finance_profile(),
     "ecommerce_v1": _ecommerce_profile(),
@@ -345,4 +262,8 @@ DOMAIN_REGISTRY: dict[str, DomainProfile] = {
 
 
 def get_domain_profile(name: str) -> DomainProfile:
-    return DOMAIN_REGISTRY.get(name, DOMAIN_REGISTRY["general"])
+    if name not in DOMAIN_REGISTRY:
+        raise ValueError(
+            f"Unsupported domain '{name}'. Supported domains: healthcare_v1, finance_v1, ecommerce_v1"
+        )
+    return DOMAIN_REGISTRY[name]

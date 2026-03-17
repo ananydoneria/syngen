@@ -57,7 +57,7 @@ class PromptGeneratorApp:
         self.prompt_text.pack(fill=tk.X)
         self.prompt_text.insert(
             "1.0",
-            "Need around 1.5k telecom customers, churn yes, mostly enterprise, credit score at least 620",
+            "Generate 1200 healthcare patients age 40-75 with high glucose and hypertension, mostly non smoker",
         )
 
         options = ttk.Frame(container)

@@ -1,12 +1,19 @@
 # Syngen (GAN + AE + LLM-Assisted Parser)
 
-Generate synthetic tabular CSV datasets from user prompts across multiple domains, with:
+Generate synthetic tabular CSV datasets from user prompts for **3 core domains** (Healthcare, Finance, Ecommerce), with:
 
 - Controlled prompt parsing (`rules`, `llm`, `hybrid`)
 - Domain-aware checkpoint routing
 - Full AutoEncoder + latent GAN backend
 - CLI and GUI interfaces
 - Kaggle-based validation pipeline
+
+## Supported Domains
+
+This tool is optimized for:
+- **Healthcare**: Clinical records, patient data, medical conditions
+- **Finance**: Customer banking data, credit scoring, loan records
+- **Ecommerce**: Customer transactions, shopping behavior, membership data
 
 ## Features
 
@@ -15,7 +22,7 @@ Generate synthetic tabular CSV datasets from user prompts across multiple domain
 - Timestamped output CSV files per run
 - GAN/AE-first generation workflow
 - Optional Gemini/OpenAI rewrite layer to generalize prompt understanding
-- Benchmark pipeline across multiple Kaggle datasets
+- Benchmark pipeline across Kaggle datasets
 
 ## Project layout
 
@@ -85,11 +92,10 @@ Edit `checkpoints/registry.json`:
 
 ```json
 {
-  "_default": "checkpoints/full_gan_ae_demo",
-  "general": "checkpoints/full_gan_ae_general",
   "healthcare_v1": "checkpoints/full_gan_ae_healthcare",
   "finance_v1": "checkpoints/full_gan_ae_finance",
-  "ecommerce_v1": "checkpoints/full_gan_ae_ecommerce"
+  "ecommerce_v1": "checkpoints/full_gan_ae_ecommerce",
+  "_default": "checkpoints/full_gan_ae_healthcare"
 }
 ```
 
@@ -142,18 +148,16 @@ Reports generated:
 
 Recent high-epoch benchmark results (GPU run, `--ae-epochs 80 --gan-epochs 160 --batch-size 512`):
 
-| Case | Similarity |
-|---|---:|
-| telco_churn | 0.9266 |
-| stroke_prediction | 0.8613 |
-| adult_income | 0.9055 |
-| heart_failure | 0.9059 |
-| credit_card_fraud | 0.8910 |
-| pima_diabetes | 0.8835 |
-| diabetes_general | 0.8835 |
-| **average** | **0.8939** |
+| Domain | Case | Similarity |
+|--------|------|---:|
+| Healthcare | stroke_prediction | 0.8613 |
+| Healthcare | heart_failure | 0.9059 |
+| Healthcare | pima_diabetes | 0.8835 |
+| Finance | credit_card_fraud | 0.8910 |
+| Finance | adult_income | 0.9055 |
+| **Avg** | **All cases** | **0.8914** |
 
-All benchmark cases are now above `0.8` overall similarity.
+All benchmark cases are above `0.8` overall similarity.
 
 ## Testing and CI
 

@@ -34,14 +34,6 @@ class KaggleCase:
 
 CASES = [
     KaggleCase(
-        name="telco_churn",
-        dataset_ref="blastchar/telco-customer-churn",
-        csv_filename="WA_Fn-UseC_-Telco-Customer-Churn.csv",
-        checkpoint_dir="checkpoints/full_gan_ae_kaggle_telco",
-        parse_mode="hybrid",
-        max_rows=12000,
-    ),
-    KaggleCase(
         name="stroke_prediction",
         dataset_ref="fedesoriano/stroke-prediction-dataset",
         csv_filename="healthcare-dataset-stroke-data.csv",
@@ -50,18 +42,18 @@ CASES = [
         max_rows=12000,
     ),
     KaggleCase(
-        name="adult_income",
-        dataset_ref="uciml/adult-census-income",
-        csv_filename="adult.csv",
-        checkpoint_dir="checkpoints/full_gan_ae_kaggle_adult_income",
-        parse_mode="hybrid",
-        max_rows=20000,
-    ),
-    KaggleCase(
         name="heart_failure",
         dataset_ref="fedesoriano/heart-failure-prediction",
         csv_filename="heart.csv",
         checkpoint_dir="checkpoints/full_gan_ae_kaggle_heart_failure",
+        parse_mode="hybrid",
+        max_rows=5000,
+    ),
+    KaggleCase(
+        name="pima_diabetes",
+        dataset_ref="uciml/pima-indians-diabetes-database",
+        csv_filename="diabetes.csv",
+        checkpoint_dir="checkpoints/full_gan_ae_kaggle_pima_diabetes",
         parse_mode="hybrid",
         max_rows=5000,
     ),
@@ -74,20 +66,12 @@ CASES = [
         max_rows=50000,
     ),
     KaggleCase(
-        name="pima_diabetes",
-        dataset_ref="uciml/pima-indians-diabetes-database",
-        csv_filename="diabetes.csv",
-        checkpoint_dir="checkpoints/full_gan_ae_kaggle_pima_diabetes",
+        name="adult_income",
+        dataset_ref="uciml/adult-census-income",
+        csv_filename="adult.csv",
+        checkpoint_dir="checkpoints/full_gan_ae_kaggle_adult_income",
         parse_mode="hybrid",
-        max_rows=5000,
-    ),
-    KaggleCase(
-        name="diabetes_general",
-        dataset_ref="mathchi/diabetes-data-set",
-        csv_filename="diabetes.csv",
-        checkpoint_dir="checkpoints/full_gan_ae_kaggle_diabetes_general",
-        parse_mode="hybrid",
-        max_rows=5000,
+        max_rows=20000,
     ),
 ]
 
@@ -262,42 +246,32 @@ def _cap_rows(df: pd.DataFrame, max_rows: int | None) -> pd.DataFrame:
 
 def _derive_prompt(case_name: str, df: pd.DataFrame) -> str:
     n = len(df)
-    if case_name == "telco_churn":
-        return (
-            f"Generate {n} telecom customer records with moderate tenure and monthly spend, "
-            "mostly non churned; industry=ecommerce_v1; strict=false; seed=42"
-        )
     if case_name == "stroke_prediction":
         return (
             f"Generate {n} healthcare records age 40-75 with high glucose and hypertension mix, "
             "mostly non smoker; industry=healthcare_v1; strict=false; seed=42"
         )
-    if case_name == "adult_income":
-        return (
-            f"Generate {n} demographic income records age 25-60 with medium to high income and mixed regions, "
-            "mostly employed; industry=finance_v1; strict=false; seed=42"
-        )
     if case_name == "heart_failure":
         return (
-            f"Generate {n} cardiology records age 45-80 with high risk score and mixed smoker status, "
+            f"Generate {n} healthcare records age 45-80 with high risk score and mixed smoker status, "
             "mostly hypertensive; industry=healthcare_v1; strict=false; seed=42"
-        )
-    if case_name == "credit_card_fraud":
-        return (
-            f"Generate {n} transaction records with varied transaction_amount and risk_score, "
-            "mostly non defaulted customers; industry=finance_v1; strict=false; seed=42"
         )
     if case_name == "pima_diabetes":
         return (
-            f"Generate {n} diabetes records age 30-70 with bmi 22-42 and high glucose, "
+            f"Generate {n} healthcare records age 30-70 with bmi 22-42 and high glucose, "
             "70% diabetic; industry=healthcare_v1; strict=false; seed=42"
         )
-    if case_name == "diabetes_general":
+    if case_name == "credit_card_fraud":
         return (
-            f"Generate {n} healthcare metabolic records age 25-70 with bmi and glucose variation, "
-            "mostly female; industry=healthcare_v1; strict=false; seed=42"
+            f"Generate {n} finance records with varied transaction_amount and risk_score, "
+            "mostly non defaulted customers; industry=finance_v1; strict=false; seed=42"
         )
-    return f"Generate {n} records; strict=false; seed=42"
+    if case_name == "adult_income":
+        return (
+            f"Generate {n} finance records age 25-60 with medium to high income, "
+            "mostly employed; industry=finance_v1; strict=false; seed=42"
+        )
+    return f"Generate {n} records; industry=healthcare_v1; strict=false; seed=42"
 
 
 def _find_col(df: pd.DataFrame, candidates: list[str]) -> str:
